@@ -9,6 +9,7 @@ from models.city import City
 from models.amenity import Amenity
 from models.review import Review
 
+
 class FileStorage:
     """Serializes instances to a JSON file & deserializes back to instances"""
     __file_path = "file.json"
@@ -19,16 +20,21 @@ class FileStorage:
         if cls is None:
             return self.__objects
         else:
-            return {k: v for k, v in self.__objects.items() if isinstance(v, cls)}
+            return {
+                k: v for k, v in self.__objects.items() if isinstance(v, cls)
+            }
 
     def new(self, obj):
         """Adds new object to storage dictionary"""
-        self.__objects[f"{type(obj).__name__}.{obj.id}"] = obj
+        key = "{}.{}".format(type(obj).__name__, obj.id)
+        self.__objects[key] = obj
 
     def save(self):
         """Saves storage dictionary to file"""
         with open(self.__file_path, 'w') as f:
-            json.dump({k: v.to_dict() for k, v in self.__objects.items()}, f)
+            json.dump(
+                {k: v.to_dict() for k, v in self.__objects.items()}, f
+            )
 
     def reload(self):
         """Loads storage dictionary from file"""
@@ -44,7 +50,7 @@ class FileStorage:
     def delete(self, obj=None):
         """Delete obj from __objects if it's inside"""
         if obj:
-            key = f"{type(obj).__name__}.{obj.id}"
+            key = "{}.{}".format(type(obj).__name__, obj.id)
             if key in self.__objects:
                 del self.__objects[key]
 
