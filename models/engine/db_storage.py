@@ -11,6 +11,7 @@ from models.amenity import Amenity
 from models.review import Review
 import os
 
+
 class DBStorage:
     """Database Storage class"""
     __engine = None
@@ -60,7 +61,8 @@ class DBStorage:
     def reload(self):
         """Create all tables and initialize a new session"""
         Base.metadata.create_all(self.__engine)
-        session_factory = sessionmaker(bind=self.__engine, expire_on_commit=False)
+        session_factory = sessionmaker(
+            bind=self.__engine, expire_on_commit=False)
         self.__session = scoped_session(session_factory)
 
     def close(self):
