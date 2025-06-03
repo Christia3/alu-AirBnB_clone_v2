@@ -5,6 +5,7 @@ from sqlalchemy import Column, String
 from sqlalchemy.orm import relationship
 from models import storage_type
 
+
 class State(BaseModel, Base):
     """ State class """
     __tablename__ = 'states'
@@ -15,7 +16,10 @@ class State(BaseModel, Base):
     else:
         @property
         def cities(self):
-            """Returns the list of City instances with state_id equal to current State.id"""
+            """Returns list of City instances with matching state_id"""
             from models import storage
             from models.city import City
-            return [city for city in storage.all(City).values() if city.state_id == self.id]
+            return [
+                city for city in storage.all(City).values()
+                if city.state_id == self.id
+            ]
