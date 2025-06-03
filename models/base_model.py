@@ -2,8 +2,6 @@
 """This module defines a BaseModel class."""
 import uuid
 from datetime import datetime
-from models import storage
-
 
 class BaseModel:
     """Base class for all models"""
@@ -27,7 +25,9 @@ class BaseModel:
 
     def save(self):
         """Updates the updated_at timestamp and saves to storage"""
+        from models import storage  # Moved import here to avoid circular import
         self.updated_at = datetime.now()
+        storage.new(self)
         storage.save()
 
     def to_dict(self):
